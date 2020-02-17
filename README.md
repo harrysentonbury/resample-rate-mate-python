@@ -7,8 +7,11 @@
 Now all I got to do is make it user friendly. I think I will do
 it tomorrow.
 
-Divide the sample_rate_new rate by the sample_rate_old to get resampling
-factor. OR. Make the sample_rate_new = sample_rate_old, then you can change
+**As it stands, it will resample any .wav file to 48000 Hz**. Stereo or mono.
+
+*else :-*
+Divide the sample_rate_new rate by the sample_rate_old to get resample_factor.
+OR. Make the sample_rate_new = sample_rate_old, then you can change
 the play-back speed by some factor **f** by making the resample_factor = **f**.
 
 ```
