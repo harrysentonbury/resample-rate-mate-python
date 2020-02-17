@@ -10,9 +10,6 @@ try:
     warnings.simplefilter('ignore', category=wf.WavFileWarning)
     sample_rate_old, data = wf.read('/path_to/whateva.wav')
 
-    sample_rate_new = 48000                   # New sample rate
-    resample_factor = 1.08843537414966      # 48000 / 44100 = 1.08843537414966
-
     data_list = []
     window_size = 88200
 
@@ -27,7 +24,7 @@ try:
         data_list.append(data[blox * window_size:, :])  # Tack on remaining samples
     data_resampled = np.empty(shape=[0, 2])
 
-except ValueError:
+except IndexError:
 
     axis_0 = data.shape
     print('mono')
@@ -44,6 +41,8 @@ except ValueError:
 
     data_resampled = np.empty(shape=[0, ])
 
+sample_rate_new = 48000                   # New sample rate
+resample_factor = 1.08843537414966      # 48000 / 44100 = 1.08843537414966
 # Resample each blox individualy.
 for i in data_list:
     new_sample_amount = int(len(i) * resample_factor)
