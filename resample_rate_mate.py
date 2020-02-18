@@ -51,7 +51,7 @@ def go():
         data_resampled = np.empty(shape=[0, ])
 
     try:
-        sample_rate_new = int(sample_rate_entry.get())           # New sample rate
+        sample_rate_new = int(sample_rate_var.get())           # New sample rate
         resample_factor = sample_rate_new / sample_rate_old     # 48000 / 44100 = 1.08843537414966
         speed_factor = float(speed_factor_entry.get())
         if speed_factor != 0.0:
@@ -84,6 +84,7 @@ def go():
         time.sleep(len(data_resampled) / sample_rate_new)
         sd.stop()
         print(output_file_entry.get())  # ../resample-it-baby/nano_sample.wav
+        print(sample_rate_new)
         # ../resample-it-baby/fm_wave.wav
 
 
@@ -117,14 +118,18 @@ message_win = None
 master = tk.Tk()
 master.geometry('600x300')
 
+sample_rate_var = tk.StringVar()
+
 input_file_label = tk.Label(master, text='Input Path To File')
 output_file_label = tk.Label(master, text='Name The Ouput File')
 input_file_entry = tk.Entry(master)
 input_file_entry.focus_set()
 output_file_entry = tk.Entry(master)
-sample_rate_label = tk.Label(master, text='Required Sample Rate')
+sample_rate_label = tk.Label(master, text='Select Sample Rate')
 speed_factor_label = tk.Label(master, text='Speed Change Factor')
-sample_rate_entry = tk.Entry(master)
+radio_0 = tk.Radiobutton(master, text='44100 Hz', variable=sample_rate_var, value=44100)
+radio_1 = tk.Radiobutton(master, text='48000 Hz', variable=sample_rate_var, value=48000)
+radio_1.select()
 
 speed_factor_entry = tk.Entry(master)
 speed_factor_entry.insert(0, 0.0)
@@ -134,10 +139,11 @@ input_file_label.grid(column=0, row=0, padx=20)
 output_file_label.grid(column=0, row=1, padx=20)
 input_file_entry.grid(column=1, row=0)
 output_file_entry.grid(column=1, row=1)
-sample_rate_label.grid(column=0, row=2, padx=20, pady=20)
-speed_factor_label.grid(column=0, row=3, padx=20)
-sample_rate_entry.grid(column=1, row=2)
-speed_factor_entry.grid(column=1, row=3)
+sample_rate_label.grid(column=0, row=2, padx=20, pady=10)
+radio_0.grid(column=1, row=2)
+radio_1.grid(column=1, row=3)
+speed_factor_label.grid(column=0, row=4, padx=20, pady=15)
+speed_factor_entry.grid(column=1, row=4)
 go_button.grid(column=3, row=0, padx=20, pady=10, rowspan=2)
 
 master.mainloop()
