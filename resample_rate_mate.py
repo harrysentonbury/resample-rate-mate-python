@@ -10,6 +10,10 @@ import time
 
 def go():
     try:
+        go_button.config(text='Wait', state='disabled')
+        go_button.update()
+        if message_win is not None:
+            message_win.destroy()
         # shush any potential- skipping weird meta data warning
         warnings.simplefilter('ignore', category=wf.WavFileWarning)
         sample_rate_old, data = wf.read(input_file_entry.get())
@@ -29,17 +33,11 @@ def go():
         data_resampled = np.empty(shape=[0, 2])
 
     except FileNotFoundError:
-        print("bollox")
         input_file_entry.delete(0, last='end')
         show_message('FileNotFoundError', 'File name wrong or does not exist')
         return
     except IndexError:
-
-        axis_0 = data.shape  # see if triggers error
-        print('mono')
-
         # Chop sound file into a list of mono blox of signal.resamplable size.
-
         blox = int(len(data) // window_size)
         remainder = (len(data) % window_size) > 0
 
@@ -62,7 +60,7 @@ def go():
                 speed_factor_entry.insert(0, 0.0)
                 return
             resample_factor = resample_factor / speed_factor
-            print('speed factor ran {}'.format(speed_factor))
+
     except ValueError:
         speed_factor_entry.delete(0, last='end')
         show_message('ValueError', 'Speed Change Factor must be a number')
@@ -78,14 +76,24 @@ def go():
 
         data_resampled = np.int16(data_resampled)
 
-        # wf.write(output_file_entry.get(), sample_rate_new, data_resampled)
+        stamp = output_file_entry.get()
+        if len(stamp) == 0:
+            stamp = "RRM-{}.wav".format(str(time.ctime()[-16:].replace(" ", "-").replace(":", "-")))
+        else:
+            stamp = "{}.wav".format(stamp)
+        # wf.write(stamp, sample_rate_new, data_resampled)
 
         sd.play(data_resampled, sample_rate_new)
         time.sleep(len(data_resampled) / sample_rate_new)
         sd.stop()
-        print(output_file_entry.get())  # ../resample-it-baby/nano_sample.wav
+        print(stamp)  # ../resample-it-baby/nano_sample.wav
         print(sample_rate_new)
         # ../resample-it-baby/fm_wave.wav
+
+        show_message("Done- {}Hz wav".format(sample_rate_new), "File Saved as {}".format(stamp))
+
+        go_button.update()
+        go_button.config(text='GO', state='normal')
 
 
 def message_win_func(mtitle, blah):
@@ -122,7 +130,8 @@ sample_rate_var = tk.StringVar()
 
 input_file_label = tk.Label(master, text='Input Path To File')
 output_file_label = tk.Label(master, text='Name The Ouput File')
-input_file_entry = tk.Entry(master)
+dot_wav_label = tk.Label(master, text='.wav', bg='white', relief=tk.SUNKEN)
+input_file_entry = tk.Entry(master, width=24)
 input_file_entry.focus_set()
 output_file_entry = tk.Entry(master)
 sample_rate_label = tk.Label(master, text='Select Sample Rate')
@@ -133,11 +142,16 @@ radio_1.select()
 
 speed_factor_entry = tk.Entry(master)
 speed_factor_entry.insert(0, 0.0)
-go_button = tk.Button(master, text='GO', bg='green', height=3, width=7, command=go)
+go_button = tk.Button(master, text='GO', bg='#0ba4a4',
+                      activebackground='#17fbfb', height=3, width=7, command=go)
+master.bind('<Down>', lambda event=None: output_file_entry.focus_set())
+master.bind('<Up>', lambda event=None: input_file_entry.focus_set())
+
 
 input_file_label.grid(column=0, row=0, padx=20)
 output_file_label.grid(column=0, row=1, padx=20)
-input_file_entry.grid(column=1, row=0)
+dot_wav_label.grid(column=2, row=1, sticky='w', padx=2)
+input_file_entry.grid(column=1, row=0, columnspan=2, sticky='w')
 output_file_entry.grid(column=1, row=1)
 sample_rate_label.grid(column=0, row=2, padx=20, pady=10)
 radio_0.grid(column=1, row=2)
