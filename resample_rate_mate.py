@@ -124,11 +124,13 @@ def show_message(mtitle, blah):
 message_win = None
 
 master = tk.Tk()
-master.geometry('600x300')
+master.geometry('700x310')
+master.title("Resample Rate Mate")
+master.configure(padx=40, pady=20)
 
 sample_rate_var = tk.StringVar()
 
-input_file_label = tk.Label(master, text='Input Path To File')
+input_file_label = tk.Label(master, text='Input /Path/To-File')
 output_file_label = tk.Label(master, text='Name The Ouput File')
 dot_wav_label = tk.Label(master, text='.wav', bg='white', relief=tk.SUNKEN)
 input_file_entry = tk.Entry(master, width=24)
@@ -136,11 +138,13 @@ input_file_entry.focus_set()
 output_file_entry = tk.Entry(master)
 sample_rate_label = tk.Label(master, text='Select Sample Rate')
 speed_factor_label = tk.Label(master, text='Speed Change Factor')
-radio_0 = tk.Radiobutton(master, text='44100 Hz', variable=sample_rate_var, value=44100)
-radio_1 = tk.Radiobutton(master, text='48000 Hz', variable=sample_rate_var, value=48000)
+radio_0 = tk.Radiobutton(master, text='44100 Hz', variable=sample_rate_var,
+                         value=44100, font='Times 15', relief=tk.RAISED, padx=10)
+radio_1 = tk.Radiobutton(master, text='48000 Hz', variable=sample_rate_var,
+                         value=48000, font='Times 15', relief=tk.RAISED, padx=10)
 radio_1.select()
 
-speed_factor_entry = tk.Entry(master)
+speed_factor_entry = tk.Entry(master, font=("Helvetica", 13))
 speed_factor_entry.insert(0, 0.0)
 go_button = tk.Button(master, text='GO', bg='#0ba4a4',
                       activebackground='#17fbfb', height=3, width=7, command=go)
@@ -148,16 +152,16 @@ master.bind('<Down>', lambda event=None: output_file_entry.focus_set())
 master.bind('<Up>', lambda event=None: input_file_entry.focus_set())
 
 
-input_file_label.grid(column=0, row=0, padx=20)
-output_file_label.grid(column=0, row=1, padx=20)
-dot_wav_label.grid(column=2, row=1, sticky='w', padx=2)
-input_file_entry.grid(column=1, row=0, columnspan=2, sticky='w')
+input_file_label.grid(column=0, row=0, padx=30, sticky='se')
+output_file_label.grid(column=0, row=1, pady=20, padx=20, sticky='e')
+dot_wav_label.grid(column=2, row=1, sticky='w')
+input_file_entry.grid(column=1, row=0, columnspan=2)
 output_file_entry.grid(column=1, row=1)
-sample_rate_label.grid(column=0, row=2, padx=20, pady=10)
+sample_rate_label.grid(column=0, row=2, pady=10)
 radio_0.grid(column=1, row=2)
 radio_1.grid(column=1, row=3)
-speed_factor_label.grid(column=0, row=4, padx=20, pady=15)
+speed_factor_label.grid(column=0, row=4, pady=30, sticky='s')
 speed_factor_entry.grid(column=1, row=4)
-go_button.grid(column=3, row=0, padx=20, pady=10, rowspan=2)
+go_button.grid(column=3, row=0, padx=20, rowspan=2, sticky='n')
 
 master.mainloop()
