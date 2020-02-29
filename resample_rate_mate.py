@@ -4,7 +4,6 @@ import scipy.io.wavfile as wf
 from scipy.signal import resample
 import warnings
 import tkinter as tk
-import sounddevice as sd
 import time
 
 
@@ -81,14 +80,7 @@ def go():
             stamp = "RRM-{}.wav".format(str(time.ctime()[-16:].replace(" ", "-").replace(":", "-")))
         else:
             stamp = "{}.wav".format(stamp)
-        # wf.write(stamp, sample_rate_new, data_resampled)
-
-        sd.play(data_resampled, sample_rate_new)
-        time.sleep(len(data_resampled) / sample_rate_new)
-        sd.stop()
-        print(stamp)  # ../resample-it-baby/nano_sample.wav
-        print(sample_rate_new)
-        # ../resample-it-baby/fm_wave.wav
+        wf.write(stamp, sample_rate_new, data_resampled)
 
         show_message("Done- {}Hz wav".format(sample_rate_new), "File Saved as {}".format(stamp))
 
