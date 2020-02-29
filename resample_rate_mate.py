@@ -53,10 +53,10 @@ def go():
         resample_factor = sample_rate_new / sample_rate_old     # 48000 / 44100 = 1.08843537414966
         speed_factor = float(speed_factor_entry.get())
         if speed_factor != 0.0:
-            if speed_factor < 0.1 or speed_factor > 10.0:
+            if speed_factor < 0.1 or speed_factor > 12.0:
                 speed_factor_entry.delete(0, last='end')
                 show_message('Speed Factor Value Out Of Bounds',
-                             'Speed Change Factor must be betwen 0.1 to 10')
+                             'Speed Change Factor must be betwen 0.1 to 12.0')
                 speed_factor_entry.insert(0, 0.0)
                 return
             resample_factor = resample_factor / speed_factor
