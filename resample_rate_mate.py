@@ -3,58 +3,6 @@ import numpy as np
 import scipy.io.wavfile as wf
 from scipy.signal import resample
 import warnings
-<<<<<<< HEAD
-
-
-try:
-    # shush any potential- skipping weird meta data warning
-    warnings.simplefilter('ignore', category=wf.WavFileWarning)
-    sample_rate_old, data = wf.read('/path_to/whateva.wav')
-
-    data_list = []
-    window_size = 88200
-
-    # Chop sound file into a list of stereo blox of signal.resamplable size.
-
-    blox = int(len(data[:, 0]) // window_size)
-    remainder = (len(data[:, 0]) % window_size) > 0
-
-    for i in range(blox):
-        data_list.append(data[i * window_size:(i * window_size) + window_size, :])
-    if remainder is True:
-        data_list.append(data[blox * window_size:, :])  # Tack on remaining samples
-    data_resampled = np.empty(shape=[0, 2])
-
-except IndexError:
-
-    axis_0 = data.shape
-    print('mono')
-
-    # Chop sound file into a list of mono blox of signal.resamplable size.
-
-    blox = int(len(data) // window_size)
-    remainder = (len(data) % window_size) > 0
-
-    for i in range(blox):
-        data_list.append(data[i * window_size:(i * window_size) + window_size])
-    if remainder is True:
-        data_list.append(data[blox * window_size:])
-
-    data_resampled = np.empty(shape=[0, ])
-
-sample_rate_new = 48000                   # New sample rate
-resample_factor = 1.08843537414966      # 48000 / 44100 = 1.08843537414966
-# Resample each blox individualy.
-for i in data_list:
-    new_sample_amount = int(len(i) * resample_factor)
-
-    slice_resampled = resample(i, new_sample_amount)
-    data_resampled = np.concatenate((data_resampled, slice_resampled))
-
-data_resampled = np.int16(data_resampled)
-
-wf.write('resampled_whateva.wav', sample_rate_new, data_resampled)
-=======
 import tkinter as tk
 import time
 
@@ -86,6 +34,8 @@ def go():
     except FileNotFoundError:
         input_file_entry.delete(0, last='end')
         show_message('FileNotFoundError', 'File name wrong or does not exist')
+        go_button.update()
+        go_button.config(text='GO', state='normal')
         return
     except IndexError:
         # Chop sound file into a list of mono blox of signal.resamplable size.
@@ -116,6 +66,8 @@ def go():
         speed_factor_entry.delete(0, last='end')
         show_message('ValueError', 'Speed Change Factor must be a number')
         speed_factor_entry.insert(0, 0.0)
+        go_button.update()
+        go_button.config(text='GO', state='normal')
         return
     else:
         # Resample each blox individualy.
@@ -209,4 +161,3 @@ speed_factor_entry.grid(column=1, row=4)
 go_button.grid(column=3, row=0, padx=20, rowspan=2, sticky='n')
 
 master.mainloop()
->>>>>>> gui-version
